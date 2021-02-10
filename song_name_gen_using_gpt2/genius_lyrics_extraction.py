@@ -47,7 +47,7 @@ def request_song_url(artist_name, song_cap):
     return songs
     
 # DEMO
-print(request_song_url('Lana Del Rey', 2))
+# print(request_song_url('Lana Del Rey', 2))
 
 
 # Scrape lyrics from a Genius.com song URL
@@ -61,7 +61,7 @@ def scrape_song_lyrics(url):
     lyrics = os.linesep.join([s for s in lyrics.splitlines() if s])         
     return lyrics
 # DEMO
-print(scrape_song_lyrics('https://genius.com/Lana-del-rey-young-and-beautiful-lyrics'))
+# print(scrape_song_lyrics('https://genius.com/Lana-del-rey-young-and-beautiful-lyrics'))
 
 
 
@@ -74,6 +74,27 @@ def write_lyrics_to_file(artist_name, song_count):
     f.close()
     num_lines = sum(1 for line in open('lyrics/' + artist_name.lower() + '.txt', 'rb'))
     print('Wrote {} lines to file from {} songs'.format(num_lines, song_count))
-  
+
+
+
+def data_preprocessing_on_file(artist_name):
+    file= open('lyrics/'+ artist_name.lower()+'.txt',encoding='UTF-8')
+    file_read = file.read()
+    lines = file_read.split('\n')
+    lyrics = ""
+
+
+    for i,line in enumerate(lines):
+        lyrics+="<|startoftext|>"
+        lyrics+= line.replace('\"', '').replace('*', '').replace('#', '').replace('%', '').replace('&', '').replace('"', '')
+        lyrics+='<|endoftext|>'
+
+    print(lyrics)
+
+    file= open('lyrics/'+ artist_name.lower()+'.txt', 'wb')
+    file.write(lyrics.encode("utf8"))
+    file.close()
+
 # DEMO  
-write_lyrics_to_file('Kendrick Lamar', 100)
+# write_lyrics_to_file('Taylor Swift', 200)
+data_preprocessing_on_file("Eminem")
